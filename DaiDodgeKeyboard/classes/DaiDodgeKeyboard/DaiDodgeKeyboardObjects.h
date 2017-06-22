@@ -6,7 +6,7 @@
 //  Copyright (c) 2014年 ChilunChen. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 
 @interface DaiDodgeKeyboardObjects : NSObject
 
@@ -16,6 +16,7 @@
 @property (nonatomic, assign) CGRect originalViewFrame;
 @property (nonatomic, assign) CGRect keyboardFrame;
 @property (nonatomic, assign) CGFloat shiftHeight;
+@property (nonatomic, strong) UIViewController* ViewController;
 @property (nonatomic, assign) double keyboardAnimationDutation;
 @property (nonatomic, assign) BOOL isKeyboardShow;
 

@@ -14,18 +14,53 @@
 
 #pragma mark - class method
 
+//加入inputAccessoryView控制键盘收起
++(UIToolbar *)toorBar:(UIView *)newFirstResponderView{
+    UIToolbar *toolbar = [[UIToolbar alloc]initWithFrame:CGRectMake(0, 0,[UIScreen mainScreen].bounds.size.width, 30)];
+    //粗糙的只判断了三种情况
+    if ([newFirstResponderView isKindOfClass:[UITextField class]]) {
+        UITextField* tf = (UITextField *)newFirstResponderView;
+        tf.inputAccessoryView = toolbar;
+        
+    }else if ([newFirstResponderView isKindOfClass:[UITextView class]]){
+        UITextView *tv = (UITextView *)newFirstResponderView;
+        tv.inputAccessoryView = toolbar;
+        
+    }else if ([newFirstResponderView isKindOfClass:[UISearchBar class]]){
+        UISearchBar *bar = (UISearchBar *)newFirstResponderView;
+        bar.inputAccessoryView = toolbar;
+    }
+    //
+    NSString *bundlePath = [[NSBundle mainBundle] pathForResource:@"MLInputDodger" ofType:@"bundle"];
+    NSString *imgPath= [bundlePath stringByAppendingPathComponent:@"retract"];
+    
+    UIImage *image = [UIImage imageWithContentsOfFile:imgPath];
+    [toolbar setItems:@[[[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil],[[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil],[[UIBarButtonItem alloc]initWithImage:image style:UIBarButtonItemStylePlain target:self action:@selector(selectDone)]]];
+    return toolbar;
+
+}
+
 + (void)changeFirstResponder:(UIView *)newFirstResponderView
 {
+
+    //加入toolbar
+    [self toorBar:newFirstResponderView];
+    //
 	if ([self objects].isKeyboardShow) {
 		[self dodgeNewView:newFirstResponderView];
 		[self objects].firstResponderView = newFirstResponderView;
 	} else {
 		[self objects].firstResponderView = newFirstResponderView;
 	}
+    
 }
-
++(void)selectDone{
+    [[self objects].firstResponderView resignFirstResponder];
+}
 + (void)dodgeKeyboardAnimation
 {
+    NSLog(@"dodgeKeyboardAnimation:%f",[self objects].observerView.frame.origin.y);
+  
     CGFloat currentKeyboardHeight = MAX([self currentKeyboardFrame].origin.x, [self currentKeyboardFrame].origin.y);
     CGRect currentFirstResponderFrame = [self currentFirstResponderFrame:[self objects].firstResponderView];
     CGFloat viewFloor = currentFirstResponderFrame.origin.y + currentFirstResponderFrame.size.height;
@@ -43,7 +78,16 @@
         }];
     } else if (![self objects].isKeyboardShow) {
         [UIView animateWithDuration:[self objects].keyboardAnimationDutation animations: ^{
-            [self objects].observerView.frame = [self objects].originalViewFrame;
+//            NSLog(@"ViewController:%@",[self objects].ViewController);
+          
+             [self objects].observerView.frame = [self objects].originalViewFrame;
+            
+//            if ([self objects].ViewController.topLayoutGuide.length < 64 && [self objects].ViewController.navigationController.navigationBar.frame.size.height >= 64) {
+//                
+//                [self objects].observerView.frame = CGRectMake(0,[self objects].originalViewFrame.origin.y + [self objects].ViewController.navigationController.navigationBar.frame.size.height + [self objects].ViewController.topLayoutGuide.length, [self objects].originalViewFrame.size.width, [self objects].originalViewFrame.size.height);
+//            }else{
+//                [self objects].observerView.frame = [self objects].originalViewFrame;
+//            }
         } completion:^(BOOL finished) {
             [self objects].shiftHeight = 0;
         }];
@@ -73,7 +117,10 @@
         }];
     } else {
         [UIView animateWithDuration:[self objects].keyboardAnimationDutation animations: ^{
+            
             [self objects].observerView.frame = [self objects].originalViewFrame;
+          
+           
         } completion:^(BOOL finished) {
             [self objects].shiftHeight = 0;
         }];

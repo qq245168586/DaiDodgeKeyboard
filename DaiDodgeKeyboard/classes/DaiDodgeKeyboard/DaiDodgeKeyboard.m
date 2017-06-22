@@ -29,6 +29,8 @@
 {
     //第一次看到鍵盤
     if (![self objects].isKeyboardShow) {
+
+        
         [self objects].isKeyboardShow = YES;
         NSDictionary *userInfo = [notification userInfo];
         [self objects].keyboardAnimationDutation = [[userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] doubleValue];
@@ -74,8 +76,12 @@
 
 + (void)addRegisterTheViewNeedDodgeKeyboard:(UIView *)view
 {
+    
+
+    
     [self objects].observerView = view;
     [self objects].originalViewFrame = view.frame;
+    NSLog(@"addRegisterTheViewNeedDodgeKeyboardY:%f",view.frame.origin.y);
     [self objects].isKeyboardShow = NO;
 	[self addObservers];
 }

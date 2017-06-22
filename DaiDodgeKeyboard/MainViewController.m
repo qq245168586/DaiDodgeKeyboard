@@ -120,7 +120,10 @@
 			[v performSelector:@selector(setInputAccessoryView:) withObject:toolBar];
 		}
 	}
-	[DaiDodgeKeyboard addRegisterTheViewNeedDodgeKeyboard:self.view];
+	
 }
-
+-(void)viewDidAppear:(BOOL)animated{
+    [super viewDidAppear:animated];
+    [DaiDodgeKeyboard addRegisterTheViewNeedDodgeKeyboard:self.view];
+}
 @end

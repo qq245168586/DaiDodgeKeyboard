@@ -29,6 +29,7 @@
 {
 	if ([DaiDodgeKeyboard objects].observerView) {
 		if ([self isViewInSuper:[DaiDodgeKeyboard objects].observerView]) {
+            NSLog(@"firstResponder : %@",[DaiDodgeKeyboard objects].firstResponderView);
 			[DaiDodgeKeyboard changeFirstResponder:self];
 		}
 	}
